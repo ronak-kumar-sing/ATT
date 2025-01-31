@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kids Progress Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.min.js"></script>
+  <style>
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.5s;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+
+    .streak-flame {
+      animation: flame 0.8s infinite alternate;
+    }
+
+    @keyframes flame {
+      from {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+
+      to {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-indigo-50 min-h-screen">
+  <div class="container mx-auto p-6">
+    <!-- Header with Streak Counter -->
+    <header class="mb-8 text-center">
+      <h1 class="text-4xl font-bold text-purple-600 mb-2">🌟 Super Kid Progress! 🌟</h1>
+      <div class="text-2xl flex items-center justify-center">
+        <span class="mr-2 streak-flame">🔥</span>
+        <span id="streakCounter" class="text-red-500 font-bold">0</span> Day Streak!
+      </div>
+    </header>
+
+    <!-- Daily Progress Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- Calendar Section -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">📅 Daily Challenges</h2>
+        <div class="grid grid-cols-7 gap-2" id="calendarGrid"></div>
+        <div class="mt-4 text-sm text-gray-500">
+          Tap days to mark completed challenges!
+        </div>
+      </div>
+
+      <!-- Progress Rings -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">🏆 Your Progress</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="relative">
+            <svg class="w-full h-32">
+              <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="56" cx="50%"
+                cy="50%" />
+              <circle class="text-yellow-400 progress-ring__circle" stroke-width="8" stroke-linecap="round"
+                stroke="currentColor" fill="transparent" r="56" cx="50%" cy="50%" id="readingProgress" />
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-2xl font-bold" id="readingPercent">0%</div>
+                <div class="text-sm">Reading</div>
+              </div>
+            </div>
+          </div>
+          <!-- Add more progress rings here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievements Section -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
+      <h2 class="text-2xl font-bold text-gray-700 mb-4">🎖️ Recent Achievements</h2>
+      <div class="grid grid-cols-3 gap-4" id="achievementsGrid">
+        <!-- Achievements will be populated dynamically -->
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-bold text-gray-700 mb-4">📝 Today's Tasks</h2>
+      <div class="space-y-3" id="taskList">
+        <!-- Tasks will be added dynamically -->
+      </div>
+    </div>
+  </div>
+    <a href="chat.html"><button id="chatBotButton"
+      class="fixed bottom-4 right-4 bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 transition-all z-50 flex items-center animate-bounce">
+      <span class="mr-2 text-xl">🤖</span>
+      <span class="font-bold text-lg">ATT</span>
+    </button>
+  </a>
+
+
+  <script>
+    // Initialize data
+    let state = {
+      streak: 0,
+      lastActiveDate: null,
+      progress: { reading: 0, math: 0, creative: 0 },
+      achievements: [],
+      tasks: [
+        { id: 1, text: "Read for 20 minutes", completed: false },
+        { id: 2, text: "Solve 5 math problems", completed: false },
+        { id: 3, text: "Draw a picture", completed: false }
+      ]
+    };
+
+    // Initialize calendar
+    function createCalendar() {
+      const calendar = document.getElementById('calendarGrid');
+      const today = new Date();
+
+      for (let i = 0; i < 7; i++) {
+        const day = document.createElement('div');
+        const date = new Date(today);
+        date.setDate(today.getDate() - 6 + i);
+
+        day.className = `h-12 flex items-center justify-center rounded-lg
+                               cursor-pointer ${i === 6 ? 'bg-purple-200' : 'bg-gray-100'}`;
+        day.textContent = date.getDate();
+        day.dataset.date = date.toISOString().split('T')[0];
+
+        if (i === 6) day.innerHTML += ' 🎉';
+        day.addEventListener('click', () => toggleDayComplete(day));
+        calendar.appendChild(day);
+      }
+    }
+
+    // Toggle day completion
+    function toggleDayComplete(day) {
+      const wasCompleted = day.classList.contains('bg-green-400');
+      day.classList.toggle('bg-green-400');
+      day.classList.toggle('text-white');
+      updateStreak(!wasCompleted);
+      updateProgress();
+      checkAchievements();
+    }
+
+    // Update streak logic
+    function updateStreak(didComplete) {
+      const today = new Date().toISOString().split('T')[0];
+
+      if (didComplete) {
+        state.streak = state.lastActiveDate === today ? state.streak : state.streak + 1;
+        state.lastActiveDate = today;
+      } else {
+        state.streak = Math.max(0, state.streak - 1);
+      }
+
+      document.getElementById('streakCounter').textContent = state.streak;
+      animateStreakCounter();
+    }
+
+    // Animate streak counter
+    function animateStreakCounter() {
+      anime({
+        targets: '#streakCounter',
+        scale: [1, 1.5, 1],
+        duration: 500,
+        easing: 'easeOutElastic(1, .5)'
+      });
+    }
+
+    // Update progress rings
+    function updateProgress() {
+      const circumference = 2 * Math.PI * 56;
+      ['reading', 'math', 'creative'].forEach(subject => {
+        const progressElement = document.getElementById(`${subject}Progress`);
+        const percentElement = document.getElementById(`${subject}Percent`);
+
+        state.progress[subject] = Math.min(100, state.progress[subject] + 10);
+        const offset = circumference - (state.progress[subject] / 100 * circumference);
+
+        progressElement.style.strokeDasharray = `${circumference} ${circumference}`;
+        progressElement.style.strokeDashoffset = offset;
+        percentElement.textContent = `${state.progress[subject]}%`;
+      });
+    }
+
+    // Initialize tasks
+    function initializeTasks() {
+      const taskList = document.getElementById('taskList');
+      state.tasks.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.className = 'flex items-center p-3 bg-gray-50 rounded-lg';
+        taskElement.innerHTML = `
+                    <input type="checkbox" ${task.completed ? 'checked' : ''}
+                           class="mr-3 w-5 h-5" id="task-${task.id}">
+                    <label for="task-${task.id}" class="flex-1">${task.text}</label>
+                `;
+        taskElement.querySelector('input').addEventListener('change', (e) => {
+          task.completed = e.target.checked;
+          taskElement.classList.toggle('line-through', task.completed);
+          updateProgress();
+        });
+        taskList.appendChild(taskElement);
+      });
+
+    }
+
+    // Chat Bot Button Handler
+    document.getElementById('chatBotButton').addEventListener('click', () => {
+      anime({
+        targets: '#chatBotButton',
+        scale: [1, 0.9, 1],
+        duration: 300,
+        easing: 'easeInOutQuad'
+
+      });
+      window.location.href = 'chat.html';
+
+
+      // Add your chat interface logic here
+
+    });
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', () => {
+      createCalendar();
+      initializeTasks();
+      anime({
+        targets: ['.bg-white', '#streakCounter'],
+        opacity: [0, 1],
+        translateY: [20, 0],
+        delay: anime.stagger(100),
+        easing: 'easeOutExpo'
+      });
+    });
+  </script>
+</body>
+
+</html>
