@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <title>Innovative Design Platform</title>
+  <title>AI Tutoring Tool</title>
 </head>
 
-<body class="bg-black text-white">
+<body class="bg-black text-white overflow-x-hidden">
   <!-- Animated Background -->
   <div class="fixed inset-0 z-0 opacity-20">
     <div class="absolute inset-0 bg-gradient-to-r from-purple-900/30 to-blue-900/30 animate-pulse"></div>
@@ -22,14 +22,14 @@
 
     <div data-aos="fade-up" data-aos-duration="1000">
       <h1
-        class="text-5xl font-bold sm:text-7xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+        class="text-5xl font-bold sm:text-7xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent glow">
         AI TUTORING TOOL
       </h1>
       <p class="mt-6 text-xl text-gray-300 sm:text-2xl max-w-2xl mx-auto">
         Boost your learning with AI-powered explanations and resources.
       </p>
       <button
-        class="mt-8 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl hover:scale-105 transition-transform duration-300 shadow-xl"
+        class="mt-8 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl hover:scale-105 transition-transform duration-300 shadow-xl hover:shadow-2xl"
         onclick="window.location.href='./login.html'">
         Try It Now
       </button>
@@ -44,34 +44,48 @@
   </section>
 
   <!-- Features Section -->
-
-
-  <!-- Interactive Demo Section -->
-  <!-- <section class="bg-gray-900 py-20 relative z-10">
+  <section class="py-20 relative z-10">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="interactive-demo" data-aos="fade-up">
-        <!-- <h2 class="text-3xl font-bold mb-8">Live Design Preview</h2> -->
-  <!-- <div class="demo-frame">
-          <!-- Add live design preview iframe or component -->
-  <!-- </div>
+      <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="text-xl font-semibold">Personalized Learning</h3>
+          <p class="mt-4 text-gray-300">AI adapts to your learning style and pace.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+          <h3 class="text-xl font-semibold">24/7 Support</h3>
+          <p class="mt-4 text-gray-300">Get help anytime, anywhere.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+          <h3 class="text-xl font-semibold">Interactive Tools</h3>
+          <p class="mt-4 text-gray-300">Engage with quizzes, flashcards, and more.</p>
+        </div>
       </div>
     </div>
-  <!-- </section> -->
+  </section>
+
   <!-- Floating Action Button -->
   <div class="fixed bottom-8 right-8 z-50">
     <button class="floating-btn" onclick="showChat()">
-      <svg class="w-6 h-6"><!-- Chat Icon --></svg>
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+      </svg>
     </button>
   </div>
 
   <!-- AI Chat Interface -->
-  <div id="chatInterface" class="hidden fixed bottom-24 right-8 w-96 bg-gray-800 rounded-xl shadow-xl">
-    <!-- Chat messages container -->
-    <div class="chat-messages"></div>
-    <!-- Message input -->
-    <div class="message-input">
-      <input type="text" placeholder="Ask our AI design assistant...">
-      <button onclick="sendMessage()">Send</button>
+  <div id="chatInterface"
+    class="hidden fixed bottom-24 right-8 w-96 bg-gray-800 rounded-xl shadow-xl transform transition-transform duration-300 ease-in-out">
+    <div class="p-4 border-b border-gray-700">
+      <h3 class="text-lg font-semibold">AI Chat Assistant</h3>
+    </div>
+    <div class="chat-messages p-4 h-64 overflow-y-auto"></div>
+    <div class="message-input p-4 border-t border-gray-700">
+      <input type="text" class="w-full p-2 bg-gray-700 rounded-lg text-white"
+        placeholder="Ask our AI design assistant...">
+      <button
+        class="mt-2 px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors duration-300">Send</button>
     </div>
   </div>
 
@@ -89,7 +103,12 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Particle system implementation
+    let mouse = { x: null, y: null };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
     class Particle {
       constructor() {
         this.reset();
@@ -101,25 +120,34 @@
         this.size = Math.random() * 2 + 1;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
+        this.color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
       }
 
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
 
+        // React to mouse
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          this.speedX = dx * 0.05;
+          this.speedY = dy * 0.05;
+        }
+
         if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
         if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
       }
 
       draw() {
-        ctx.fillStyle = 'rgba(147, 51, 234, 0.5)';
+        ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    // Create particles
     const particles = Array(100).fill().map(() => new Particle());
 
     function animateParticles() {
@@ -136,14 +164,6 @@
     // Interactive functions
     function showChat() {
       document.getElementById('chatInterface').classList.toggle('hidden');
-    }
-
-    function showContactForm() {
-      // Implement contact form modal
-    }
-
-    function showFeatureDemo(featureId) {
-      // Implement feature-specific demos
     }
 
     // Responsive canvas
@@ -168,16 +188,8 @@
       @apply p-4 bg-purple-600 rounded-full hover:bg-purple-700 transition-all duration-300 shadow-lg;
     }
 
-    .hover-content {
-      @apply absolute inset-0 bg-black/80 opacity-0 transition-opacity duration-300 flex items-center justify-center;
-    }
-
-    .feature-card:hover .hover-content {
-      @apply opacity-100;
-    }
-
-    .interactive-demo {
-      @apply border-2 border-purple-500/30 rounded-2xl p-6 bg-gradient-to-b from-gray-800/50 to-gray-900;
+    .glow {
+      text-shadow: 0 0 10px rgba(147, 51, 234, 0.8), 0 0 20px rgba(147, 51, 234, 0.6);
     }
   </style>
 </body>
