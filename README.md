@@ -76,7 +76,7 @@ The *AI Tutoring Tool* is a web-based platform that provides:
 
 ### 1. *Clone the Repository*
    bash
-   git clone https://github.com/your-username/ai-tutoring-tool.git
+   git clone https://github.com/ronak-kumar-sing/ATT
    cd ai-tutoring-tool
    
 
