@@ -4,281 +4,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kids Progress Tracker</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.min.js"></script>
-  <style>
-    .progress-ring__circle {
-      transition: stroke-dashoffset 0.5s;
-      transform: rotate(-90deg);
-      transform-origin: 50% 50%;
-    }
-
-    .streak-flame {
-      animation: flame 0.8s infinite alternate;
-    }
-
-    @keyframes flame {
-      from {
-        transform: scale(1);
-        opacity: 0.8;
-      }
-
-      to {
-        transform: scale(1.1);
-        opacity: 1;
-      }
-    }
-
-    @keyframes bounce {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.05);
-      }
-    }
-  </style>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <title>Innovative Design Platform</title>
 </head>
 
-<body class="bg-indigo-50 min-h-screen">
-  <div class="container mx-auto p-6">
-    <!-- Header with Streak Counter -->
-    <header class="mb-8 text-center">
-      <h1 class="text-4xl font-bold text-purple-600 mb-2">🌟 Super Kid Progress! 🌟</h1>
-      <div class="text-2xl flex items-center justify-center">
-        <span class="mr-2 streak-flame">🔥</span>
-        <span id="streakCounter" class="text-red-500 font-bold">0</span> Day Streak!
-      </div>
-    </header>
-
-    <!-- Daily Progress Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <!-- Calendar Section -->
-      <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">📅 Daily Challenges</h2>
-        <div class="grid grid-cols-7 gap-2" id="calendarGrid"></div>
-        <div class="mt-4 text-sm text-gray-500">
-          Tap days to mark completed challenges!
-        </div>
-      </div>
-
-      <!-- Progress Rings -->
-      <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">🏆 Your Progress</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="relative">
-            <svg class="w-full h-32">
-              <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="56" cx="50%"
-                cy="50%" />
-              <circle class="text-yellow-400 progress-ring__circle" stroke-width="8" stroke-linecap="round"
-                stroke="currentColor" fill="transparent" r="56" cx="50%" cy="50%" id="readingProgress" />
-            </svg>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="text-center">
-                <div class="text-2xl font-bold" id="readingPercent">0%</div>
-                <div class="text-sm">Reading</div>
-              </div>
-            </div>
-          </div>
-          <!-- Add more progress rings here -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Achievements Section -->
-    <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
-      <h2 class="text-2xl font-bold text-gray-700 mb-4">🎖️ Recent Achievements</h2>
-      <div class="grid grid-cols-3 gap-4" id="achievementsGrid">
-        <!-- Achievements will be populated dynamically -->
-      </div>
-    </div>
-
-    <!-- Task List -->
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h2 class="text-2xl font-bold text-gray-700 mb-4">📝 Today's Tasks</h2>
-      <div class="space-y-3" id="taskList">
-        <!-- Tasks will be added dynamically -->
-      </div>
-    </div>
+<body class="bg-black text-white">
+  <!-- Animated Background -->
+  <div class="fixed inset-0 z-0 opacity-20">
+    <div class="absolute inset-0 bg-gradient-to-r from-purple-900/30 to-blue-900/30 animate-pulse"></div>
   </div>
 
-  <!-- Chat and Video Call Buttons -->
-  <div class="fixed bottom-4 right-4 flex flex-col gap-4 z-50">
-    <!-- Video Call Button -->
-    <button id="videoCallButton" class="bg-red-500 text-white px-6 py-3 rounded-full shadow-lg
-                   hover:bg-red-600 transition-all flex items-center
-                   animate-pulse">
-      <span class="mr-2 text-xl">📹</span>
-      <span class="font-bold text-lg">Video Call</span>
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex flex-col items-center justify-center text-center z-10">
+    <!-- Interactive Particle Background -->
+    <canvas id="particleCanvas" class="absolute inset-0"></canvas>
+
+    <div data-aos="fade-up" data-aos-duration="1000">
+      <h1
+        class="text-5xl font-bold sm:text-7xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+        AI TUTORING TOOL
+      </h1>
+      <p class="mt-6 text-xl text-gray-300 sm:text-2xl max-w-2xl mx-auto">
+        Boost your learning with AI-powered explanations and resources.
+      </p>
+      <button
+        class="mt-8 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl hover:scale-105 transition-transform duration-300 shadow-xl"
+        onclick="window.location.href='./login.html'">
+        Try It Now
+      </button>
+    </div>
+
+    <!-- Animated Scroll Indicator -->
+    <div class="absolute bottom-8 animate-bounce">
+      <svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+
+
+  <!-- Interactive Demo Section -->
+  <!-- <section class="bg-gray-900 py-20 relative z-10">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="interactive-demo" data-aos="fade-up">
+        <!-- <h2 class="text-3xl font-bold mb-8">Live Design Preview</h2> -->
+  <!-- <div class="demo-frame">
+          <!-- Add live design preview iframe or component -->
+  <!-- </div>
+      </div>
+    </div>
+  <!-- </section> -->
+  <!-- Floating Action Button -->
+  <div class="fixed bottom-8 right-8 z-50">
+    <button class="floating-btn" onclick="showChat()">
+      <svg class="w-6 h-6"><!-- Chat Icon --></svg>
     </button>
-<br>
-<br>
-    <!-- Chat Bot Button -->
-        <a href="chat.html"><button id="chatBotButton"
-            class="fixed bottom-4 right-4 bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 transition-all z-50 flex items-center animate-bounce">
-            <span class="mr-2 text-xl">🤖</span>
-            <span class="font-bold text-lg">ATT</span>
-          </button>
-        </a>
   </div>
 
+  <!-- AI Chat Interface -->
+  <div id="chatInterface" class="hidden fixed bottom-24 right-8 w-96 bg-gray-800 rounded-xl shadow-xl">
+    <!-- Chat messages container -->
+    <div class="chat-messages"></div>
+    <!-- Message input -->
+    <div class="message-input">
+      <input type="text" placeholder="Ask our AI design assistant...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Initialize data
-    let state = {
-      streak: 0,
-      lastActiveDate: null,
-      progress: { reading: 0, math: 0, creative: 0 },
-      achievements: [],
-      tasks: [
-        { id: 1, text: "Read for 20 minutes", completed: false },
-        { id: 2, text: "Solve 5 math problems", completed: false },
-        { id: 3, text: "Draw a picture", completed: false }
-      ]
-    };
+    // Initialize animations
+    AOS.init({
+      once: true,
+      duration: 1000
+    });
 
-    // Initialize calendar
-    function createCalendar() {
-      const calendar = document.getElementById('calendarGrid');
-      const today = new Date();
+    // Particle Canvas Animation
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-      for (let i = 0; i < 7; i++) {
-        const day = document.createElement('div');
-        const date = new Date(today);
-        date.setDate(today.getDate() - 6 + i);
+    // Particle system implementation
+    class Particle {
+      constructor() {
+        this.reset();
+      }
 
-        day.className = `h-12 flex items-center justify-center rounded-lg
-                               cursor-pointer ${i === 6 ? 'bg-purple-200' : 'bg-gray-100'}`;
-        day.textContent = date.getDate();
-        day.dataset.date = date.toISOString().split('T')[0];
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * 3 - 1.5;
+      }
 
-        if (i === 6) day.innerHTML += ' 🎉';
-        day.addEventListener('click', () => toggleDayComplete(day));
-        calendar.appendChild(day);
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = 'rgba(147, 51, 234, 0.5)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
-    // Toggle day completion
-    function toggleDayComplete(day) {
-      const wasCompleted = day.classList.contains('bg-green-400');
-      day.classList.toggle('bg-green-400');
-      day.classList.toggle('text-white');
-      updateStreak(!wasCompleted);
-      updateProgress();
-      checkAchievements();
+    // Create particles
+    const particles = Array(100).fill().map(() => new Particle());
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animateParticles);
     }
 
-    // Update streak logic
-    function updateStreak(didComplete) {
-      const today = new Date().toISOString().split('T')[0];
+    animateParticles();
 
-      if (didComplete) {
-        state.streak = state.lastActiveDate === today ? state.streak : state.streak + 1;
-        state.lastActiveDate = today;
-      } else {
-        state.streak = Math.max(0, state.streak - 1);
-      }
-
-      document.getElementById('streakCounter').textContent = state.streak;
-      animateStreakCounter();
+    // Interactive functions
+    function showChat() {
+      document.getElementById('chatInterface').classList.toggle('hidden');
     }
 
-    // Animate streak counter
-    function animateStreakCounter() {
-      anime({
-        targets: '#streakCounter',
-        scale: [1, 1.5, 1],
-        duration: 500,
-        easing: 'easeOutElastic(1, .5)'
-      });
+    function showContactForm() {
+      // Implement contact form modal
     }
 
-    // Update progress rings
-    function updateProgress() {
-      const circumference = 2 * Math.PI * 56;
-      ['reading', 'math', 'creative'].forEach(subject => {
-        const progressElement = document.getElementById(`${subject}Progress`);
-        const percentElement = document.getElementById(`${subject}Percent`);
-
-        state.progress[subject] = Math.min(100, state.progress[subject] + 10);
-        const offset = circumference - (state.progress[subject] / 100 * circumference);
-
-        progressElement.style.strokeDasharray = `${circumference} ${circumference}`;
-        progressElement.style.strokeDashoffset = offset;
-        percentElement.textContent = `${state.progress[subject]}%`;
-      });
+    function showFeatureDemo(featureId) {
+      // Implement feature-specific demos
     }
 
-    // Initialize tasks
-    function initializeTasks() {
-      const taskList = document.getElementById('taskList');
-      state.tasks.forEach(task => {
-        const taskElement = document.createElement('div');
-        taskElement.className = 'flex items-center p-3 bg-gray-50 rounded-lg';
-        taskElement.innerHTML = `
-                    <input type="checkbox" ${task.completed ? 'checked' : ''}
-                           class="mr-3 w-5 h-5" id="task-${task.id}">
-                    <label for="task-${task.id}" class="flex-1">${task.text}</label>
-                `;
-        taskElement.querySelector('input').addEventListener('change', (e) => {
-          task.completed = e.target.checked;
-          taskElement.classList.toggle('line-through', task.completed);
-          updateProgress();
-        });
-        taskList.appendChild(taskElement);
-      });
-    }
-
-    document.getElementById('chatBotButton').addEventListener('click', () => {
-        anime({
-          targets: '#chatBotButton',
-          scale: [1, 0.9, 1],
-          duration: 300,
-          easing: 'easeInOutQuad'
-        });
-        window.location.href = 'index.html'; // Link to index.html
-      });
-
-      // Video Call Button Handler
-      document.getElementById('videoCallButton').addEventListener('click', () => {
-        anime({
-          targets: '#videoCallButton',
-          scale: [1, 0.9, 1],
-          duration: 300,
-          easing: 'easeInOutQuad'
-        });
-        window.location.href = 'video.html'; // Link to video.html
-      });
-    // Chat Bot Button Handler
-
-    // Initialize everything
-    document.addEventListener('DOMContentLoaded', () => {
-      createCalendar();
-      initializeTasks();
-      anime({
-        targets: ['.bg-white', '#streakCounter'],
-        opacity: [0, 1],
-        translateY: [20, 0],
-        delay: anime.stagger(100),
-        easing: 'easeOutExpo'
-      });
+    // Responsive canvas
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     });
   </script>
+
+  <style>
+    .feature-card {
+      @apply p-6 bg-gray-800 rounded-xl transition-all duration-300 relative overflow-hidden;
+      transform: translateY(0);
+    }
+
+    .feature-card:hover {
+      @apply bg-gray-700 shadow-2xl;
+      transform: translateY(-5px);
+    }
+
+    .floating-btn {
+      @apply p-4 bg-purple-600 rounded-full hover:bg-purple-700 transition-all duration-300 shadow-lg;
+    }
+
+    .hover-content {
+      @apply absolute inset-0 bg-black/80 opacity-0 transition-opacity duration-300 flex items-center justify-center;
+    }
+
+    .feature-card:hover .hover-content {
+      @apply opacity-100;
+    }
+
+    .interactive-demo {
+      @apply border-2 border-purple-500/30 rounded-2xl p-6 bg-gradient-to-b from-gray-800/50 to-gray-900;
+    }
+  </style>
 </body>
 
 </html>
