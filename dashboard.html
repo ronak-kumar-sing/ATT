@@ -4,18 +4,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kids Progress Tracker</title>
+  <title>Super Kid Progress Tracker</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Bubblegum+Sans&display=swap"
+    rel="stylesheet">
   <style>
     .progress-ring__circle {
-      transition: stroke-dashoffset 0.5s;
+      transition: stroke-dashoffset 0.5s ease-out;
       transform: rotate(-90deg);
       transform-origin: 50% 50%;
     }
 
     .streak-flame {
       animation: flame 0.8s infinite alternate;
+    }
+
+    .task-item {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     @keyframes flame {
@@ -30,7 +36,7 @@
       }
     }
 
-    @keyframes bounce {
+    @keyframes float {
 
       0%,
       100% {
@@ -42,109 +48,106 @@
       }
     }
 
-    @keyframes pulse {
+    .font-bubble {
+      font-family: 'Bubblegum Sans', cursive;
+    }
 
-      0%,
-      100% {
-        transform: scale(1);
-      }
+    .font-comic {
+      font-family: 'Comic Neue', cursive;
+    }
 
-      50% {
-        transform: scale(1.05);
-      }
+    .gradient-bg {
+      background: linear-gradient(135deg, #e0e7ff 0%, #fae8ff 100%);
     }
   </style>
 </head>
 
-<body class="bg-indigo-50 min-h-screen">
-  <div class="container mx-auto p-6">
-    <!-- Header with Streak Counter -->
-    <header class="mb-8 text-center">
-      <h1 class="text-4xl font-bold text-purple-600 mb-2">🌟 Super Kid Progress! 🌟</h1>
-      <div class="text-2xl flex items-center justify-center">
-        <span class="mr-2 streak-flame">🔥</span>
-        <span id="streakCounter" class="text-red-500 font-bold">0</span> Day Streak!
+<body class="gradient-bg min-h-screen">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <header class="mb-12 text-center">
+      <h1 class="text-5xl font-bubble text-purple-600 mb-4 drop-shadow-md">
+        🚀 Super Kid Progress Tracker!
+      </h1>
+      <div class="inline-flex items-center bg-white px-6 py-3 rounded-full shadow-lg">
+        <span class="text-3xl streak-flame">🔥</span>
+        <span id="streakCounter" class="text-2xl font-comic text-red-500 font-bold mx-2">0</span>
+        <span class="text-xl text-purple-600 font-comic">Day Streak!</span>
       </div>
     </header>
 
-    <!-- Daily Progress Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
       <!-- Calendar Section -->
-      <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">📅 Daily Challenges</h2>
-        <div class="grid grid-cols-7 gap-2" id="calendarGrid"></div>
-        <div class="mt-4 text-sm text-gray-500">
-          Tap days to mark completed challenges!
-        </div>
+      <div class="bg-white p-8 rounded-3xl shadow-xl border-4 border-purple-100">
+        <h2 class="text-3xl font-bubble text-purple-600 mb-2 flex items-center">
+          📆 <span class="ml-3">Daily Challenges</span>
+        </h2>
+        <div id="calendarMonth" class="text-xl font-comic text-purple-500 mb-4 text-center"></div>
+        <div class="grid grid-cols-7 gap-3" id="calendarGrid"></div>
+        <p class="mt-4 text-sm text-purple-500 text-center font-comic">
+          Tap the stars to mark completed days! ⭐
+        </p>
       </div>
 
-      <!-- Progress Rings -->
-      <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">🏆 Your Progress</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="relative">
-            <svg class="w-full h-32">
-              <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="56" cx="50%"
-                cy="50%" />
-              <circle class="text-yellow-400 progress-ring__circle" stroke-width="8" stroke-linecap="round"
-                stroke="currentColor" fill="transparent" r="56" cx="50%" cy="50%" id="readingProgress" />
-            </svg>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="text-center">
-                <div class="text-2xl font-bold" id="readingPercent">0%</div>
-                <div class="text-sm">Reading</div>
-              </div>
-            </div>
+      <!-- Progress Section -->
+      <div class="bg-white p-8 rounded-3xl shadow-xl border-4 border-purple-100">
+        <h2 class="text-3xl font-bubble text-purple-600 mb-6 flex items-center">
+          🏅 <span class="ml-3">Task Progress</span>
+        </h2>
+        <div class="relative w-64 h-64 mx-auto">
+          <svg class="w-full h-full">
+            <circle class="text-purple-100" stroke-width="12" stroke="currentColor" fill="transparent" r="112" cx="50%"
+              cy="50%" />
+            <circle class="text-purple-500 progress-ring__circle" stroke-width="12" stroke-linecap="round"
+              stroke="currentColor" fill="transparent" r="112" cx="50%" cy="50%" id="taskProgress" />
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <div class="text-4xl font-bubble text-purple-600" id="taskPercent">0%</div>
+            <div class="text-lg font-comic text-purple-400">Tasks Done!</div>
           </div>
-          <!-- Add more progress rings here -->
         </div>
       </div>
     </div>
 
-    <!-- Achievements Section -->
-    <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
-      <h2 class="text-2xl font-bold text-gray-700 mb-4">🎖️ Recent Achievements</h2>
-      <div class="grid grid-cols-3 gap-4" id="achievementsGrid">
-        <!-- Achievements will be populated dynamically -->
+    <!-- Task Management Section -->
+    <div class="bg-white p-8 rounded-3xl shadow-xl border-4 border-purple-100 mb-12">
+      <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <h2 class="text-3xl font-bubble text-purple-600 mb-4 sm:mb-0">
+          📋 Today's Awesome Tasks
+        </h2>
+        <button id="addTaskButton" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-xl
+                       font-comic text-lg shadow-md hover:shadow-lg transition-all
+                       flex items-center animate-float">
+          ✨ Add New Task
+        </button>
       </div>
-    </div>
-
-    <!-- Task List -->
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h2 class="text-2xl font-bold text-gray-700 mb-4">📝 Today's Tasks</h2>
-      <div class="space-y-3" id="taskList">
+      <div class="space-y-4" id="taskList">
         <!-- Tasks will be added dynamically -->
       </div>
     </div>
-  </div>
 
-  <!-- Chat and Video Call Buttons -->
-  <div class="fixed bottom-4 right-4 flex flex-col gap-4 z-50">
-    <!-- Video Call Button -->
-    <button id="videoCallButton" class="bg-red-500 text-white px-6 py-3 rounded-full shadow-lg
-                   hover:bg-red-600 transition-all flex items-center
-                   animate-pulse">
-      <span class="mr-2 text-xl">📹</span>
-      <span class="font-bold text-lg">Video Call</span>
-    </button>
-    <br>
-    <br>
-    <!-- Chat Bot Button -->
-    <a href="chat.html"><button id="chatBotButton"
-        class="fixed bottom-4 right-4 bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 transition-all z-50 flex items-center animate-bounce">
-        <span class="mr-2 text-xl">🤖</span>
-        <span class="font-bold text-lg">ATT</span>
-      </button>
-    </a>
+    <!-- Floating Action Buttons -->
+    <div class="fixed bottom-8 right-8 flex flex-col gap-4 z-50">
+      <a href="video.html">
+        <button id="videoCallButton" class="bg-red-400 hover:bg-red-500 text-white p-4 rounded-full shadow-xl
+                     transition-all flex items-center animate-float">
+          📹<span class="hidden sm:inline-block ml-2 font-comic">Video Call</span>
+        </button>
+      </a>
+      <a href="chat.html">
+        <button id="chatBotButton" class="bg-purple-400 hover:bg-purple-500 text-white p-4 rounded-full shadow-xl
+                       transition-all flex items-center animate-float">
+          🤖<span class="hidden sm:inline-block ml-2 font-comic">Chat Buddy</span>
+        </button>
+      </a>
+    </div>
   </div>
 
   <script>
-    // Initialize data
     let state = {
       streak: 0,
-      lastActiveDate: null,
-      progress: { reading: 0, math: 0, creative: 0 },
-      achievements: [],
+      completedDates: [],
       tasks: [
         { id: 1, text: "Read for 20 minutes", completed: false },
         { id: 2, text: "Solve 5 math problems", completed: false },
@@ -152,53 +155,166 @@
       ]
     };
 
-    // Initialize calendar
+    // Calendar Functions
     function createCalendar() {
       const calendar = document.getElementById('calendarGrid');
       const today = new Date();
+      const todayString = today.toISOString().split('T')[0];
+      const startDate = new Date(today);
+      startDate.setDate(today.getDate() - 6);
 
+      // Get month names
+      const startMonth = startDate.toLocaleString('default', { month: 'long' });
+      const endMonth = today.toLocaleString('default', { month: 'long' });
+
+      // Update month display
+      const monthDisplay = startMonth === endMonth
+        ? startMonth
+        : `${startMonth} - ${endMonth}`;
+      document.getElementById('calendarMonth').textContent = monthDisplay;
+
+      // Generate calendar days
+      calendar.innerHTML = '';
       for (let i = 0; i < 7; i++) {
-        const day = document.createElement('div');
         const date = new Date(today);
         date.setDate(today.getDate() - 6 + i);
+        const dateString = date.toISOString().split('T')[0];
 
-        day.className = `h-12 flex items-center justify-center rounded-lg
-                               cursor-pointer ${i === 6 ? 'bg-purple-200' : 'bg-gray-100'}`;
-        day.textContent = date.getDate();
-        day.dataset.date = date.toISOString().split('T')[0];
+        // Add month abbreviation for dates in different months
+        const displayDate = date.getMonth() !== startDate.getMonth()
+          ? `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`
+          : date.getDate();
 
-        if (i === 6) day.innerHTML += ' 🎉';
+        const day = document.createElement('div');
+        day.className = `h-12 flex items-center justify-center rounded-lg cursor-pointer
+                        ${dateString === todayString ? 'bg-purple-200' : 'bg-gray-100'}
+                        ${state.completedDates.includes(dateString) ? 'bg-green-400 text-white' : ''}`;
+        day.innerHTML = `${displayDate}${dateString === todayString ? ' 🎉' : ''}`;
+        day.dataset.date = dateString;
+
         day.addEventListener('click', () => toggleDayComplete(day));
         calendar.appendChild(day);
       }
     }
 
-    // Toggle day completion
     function toggleDayComplete(day) {
-      const wasCompleted = day.classList.contains('bg-green-400');
+      const date = day.dataset.date;
+      state.completedDates = state.completedDates.includes(date)
+        ? state.completedDates.filter(d => d !== date)
+        : [...state.completedDates, date];
+
       day.classList.toggle('bg-green-400');
       day.classList.toggle('text-white');
-      updateStreak(!wasCompleted);
-      updateProgress();
-      checkAchievements();
+      updateStreak();
     }
 
-    // Update streak logic
-    function updateStreak(didComplete) {
+    // Streak Calculation
+    function updateStreak() {
+      const dates = [...state.completedDates].sort();
+      let maxStreak = 0, currentStreak = 0;
+      let prevDate = null;
+
+      dates.forEach(dateStr => {
+        const currentDate = new Date(dateStr);
+        currentStreak = (prevDate && isConsecutiveDay(prevDate, currentDate)) ? currentStreak + 1 : 1;
+        maxStreak = Math.max(maxStreak, currentStreak);
+        prevDate = currentDate;
+      });
+
       const today = new Date().toISOString().split('T')[0];
-
-      if (didComplete) {
-        state.streak = state.lastActiveDate === today ? state.streak : state.streak + 1;
-        state.lastActiveDate = today;
-      } else {
-        state.streak = Math.max(0, state.streak - 1);
-      }
-
+      state.streak = state.completedDates.includes(today) ? maxStreak : 0;
       document.getElementById('streakCounter').textContent = state.streak;
       animateStreakCounter();
     }
 
-    // Animate streak counter
+    function isConsecutiveDay(a, b) {
+      return Math.abs((b - a) / (24 * 60 * 60 * 1000)) === 1;
+    }
+
+    // Task Management
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      state.tasks.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.className = `task-item bg-purple-50 p-4 rounded-xl shadow-sm
+                               hover:shadow-md hover:bg-purple-100 flex items-center`;
+        taskElement.innerHTML = `
+          <label class="flex items-center w-full cursor-pointer">
+            <input type="checkbox" ${task.completed ? 'checked' : ''}
+                   class="transform scale-125 mr-4 accent-purple-500">
+            <span class="text-xl font-comic ${task.completed ? 'line-through text-purple-400' : 'text-purple-600'}">
+              ${task.text}
+            </span>
+          </label>
+          <button class="ml-auto text-red-400 hover:text-red-600 transition-colors remove-task"
+                  data-id="${task.id}">
+            🗑️
+          </button>
+        `;
+
+        const checkbox = taskElement.querySelector('input');
+        checkbox.addEventListener('change', () => {
+          task.completed = !task.completed;
+          updateTaskProgress();
+          animateCheckbox(taskElement);
+        });
+
+        taskElement.querySelector('.remove-task').addEventListener('click', () => {
+          anime({
+            targets: taskElement,
+            opacity: [1, 0],
+            translateX: 100,
+            duration: 300,
+            easing: 'easeInExpo',
+            complete: () => {
+              state.tasks = state.tasks.filter(t => t.id !== task.id);
+              renderTasks();
+              updateTaskProgress();
+            }
+          });
+        });
+
+        anime({
+          targets: taskElement,
+          opacity: [0, 1],
+          translateY: [-20, 0],
+          duration: 300,
+          easing: 'easeOutExpo'
+        });
+
+        taskList.appendChild(taskElement);
+      });
+    }
+
+    // Progress Updates
+    function updateTaskProgress() {
+      const completed = state.tasks.filter(t => t.completed).length;
+      const progress = Math.round((completed / state.tasks.length) * 100) || 0;
+      const circumference = 2 * Math.PI * 112;
+
+      document.getElementById('taskPercent').textContent = `${progress}%`;
+      document.getElementById('taskProgress').style.strokeDashoffset =
+        circumference - (progress / 100 * circumference);
+    }
+
+    // Add New Task
+    document.getElementById('addTaskButton').addEventListener('click', () => {
+      const taskText = prompt('Enter a new fun task:');
+      if (taskText) {
+        const newTask = {
+          id: state.tasks.length ? Math.max(...state.tasks.map(t => t.id)) + 1 : 1,
+          text: taskText,
+          completed: false
+        };
+        state.tasks.push(newTask);
+        renderTasks();
+        updateTaskProgress();
+      }
+    });
+
+    // Animations
     function animateStreakCounter() {
       anime({
         targets: '#streakCounter',
@@ -208,68 +324,20 @@
       });
     }
 
-    // Update progress rings
-    function updateProgress() {
-      const circumference = 2 * Math.PI * 56;
-      ['reading', 'math', 'creative'].forEach(subject => {
-        const progressElement = document.getElementById(`${subject}Progress`);
-        const percentElement = document.getElementById(`${subject}Percent`);
-
-        state.progress[subject] = Math.min(100, state.progress[subject] + 10);
-        const offset = circumference - (state.progress[subject] / 100 * circumference);
-
-        progressElement.style.strokeDasharray = `${circumference} ${circumference}`;
-        progressElement.style.strokeDashoffset = offset;
-        percentElement.textContent = `${state.progress[subject]}%`;
-      });
-    }
-
-    // Initialize tasks
-    function initializeTasks() {
-      const taskList = document.getElementById('taskList');
-      state.tasks.forEach(task => {
-        const taskElement = document.createElement('div');
-        taskElement.className = 'flex items-center p-3 bg-gray-50 rounded-lg';
-        taskElement.innerHTML = `
-                    <input type="checkbox" ${task.completed ? 'checked' : ''}
-                           class="mr-3 w-5 h-5" id="task-${task.id}">
-                    <label for="task-${task.id}" class="flex-1">${task.text}</label>
-                `;
-        taskElement.querySelector('input').addEventListener('change', (e) => {
-          task.completed = e.target.checked;
-          taskElement.classList.toggle('line-through', task.completed);
-          updateProgress();
-        });
-        taskList.appendChild(taskElement);
-      });
-    }
-
-    document.getElementById('chatBotButton').addEventListener('click', () => {
+    function animateCheckbox(element) {
       anime({
-        targets: '#chatBotButton',
-        scale: [1, 0.9, 1],
+        targets: element.querySelector('input'),
+        scale: [1, 1.2, 1],
         duration: 300,
         easing: 'easeInOutQuad'
       });
-      window.location.href = 'index.html'; // Link to index.html
-    });
+    }
 
-    // Video Call Button Handler
-    document.getElementById('videoCallButton').addEventListener('click', () => {
-      anime({
-        targets: '#videoCallButton',
-        scale: [1, 0.9, 1],
-        duration: 300,
-        easing: 'easeInOutQuad'
-      });
-      window.location.href = 'video.html'; // Link to video.html
-    });
-    // Chat Bot Button Handler
-
-    // Initialize everything
+    // Initialization
     document.addEventListener('DOMContentLoaded', () => {
       createCalendar();
-      initializeTasks();
+      renderTasks();
+      updateTaskProgress();
       anime({
         targets: ['.bg-white', '#streakCounter'],
         opacity: [0, 1],
